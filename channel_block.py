@@ -1,5 +1,4 @@
 import numpy as np
-from random import random
 
 
 class Channel():
@@ -27,7 +26,7 @@ class Channel():
 	def tact(self):
 		if self.__current_request:
 			self.__current_request.inc_tacts()
-			rand_num = random()
+			rand_num = np.random.random()
 			if rand_num <= self.__dhndl_prob:
 				return None
 			else:
