@@ -1,7 +1,9 @@
 from collections import Counter
+import random
 
 from queue_system import QueueSystem 
-from graph import state_names
+from graph import state_names, pi1, pi2
+
 
 def calc_states_probs(states):
 	str_states = list(map(lambda item: ''.join(str(value) for value in item), states))
@@ -20,7 +22,7 @@ def calc_prob_of_reject(requests):
 	for request in requests:
 		if request.is_rejected:
 			amount_of_rejects += 1
-	return amount_of_rejects / len(requests) / 2
+	return amount_of_rejects / len(requests)
 
 def calc_prob_of_block(states, requests):
 	return 0
@@ -38,18 +40,18 @@ def calc_average_requests_system(states):
 	return sum_len / len(states)
 
 def calc_average_time_in_queue(requests):
+	ended_requests = list(filter(lambda request: request.is_ended, requests))
 	times = 0
-	requests_without_reject = list(filter(lambda request: not request.is_rejected, requests))
-	for request in requests_without_reject:
+	for request in ended_requests:
 		times += request.tacts_in_queue
-	return times / len(requests_without_reject)
+	return times / len(ended_requests)
 
 def calc_average_time_in_system(requests):
-	# requests_without_reject = list(filter(lambda request: not request.is_rejected, requests))
+	ended_requests = list(filter(lambda request: request.is_ended, requests))
 	times = 0
-	for request in requests:
+	for request in ended_requests:
 		times += request.tacts
-	return times / len(requests)
+	return times / len(ended_requests)
 
 def calc_measures_of_efficiency(states, requests):
 	states_probs = calc_states_probs(states)
@@ -62,17 +64,19 @@ def calc_measures_of_efficiency(states, requests):
 	W_queue = calc_average_time_in_queue(requests)
 	W_sys = calc_average_time_in_system(requests)
 
+	print('A = {}'.format(A))
+	print('Q = {}'.format(Q))
 	print('P reject = {}'.format(P_reject))
 	print('P block = {}'.format(P_block))
-	print('Q = {}'.format(Q))
-	print('A = {}'.format(A))
 	print('L queue = {}'.format(L_queue))
 	print('L system = {}'.format(L_sys))
 	print('W queue = {}'.format(W_queue))
 	print('W system = {}'.format(W_sys))
 
 def main():
-	queue_system = QueueSystem(0.7, 0.8)
+	# random.seed(1000000)
+
+	queue_system = QueueSystem(pi1, pi2)
 	queue_system.start(200000)
 	states = queue_system.history_states
 	requests = queue_system.history_requests

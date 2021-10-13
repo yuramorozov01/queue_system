@@ -1,6 +1,6 @@
-from source import Source
-from queue import Queue
-from channel import Channel
+from source_block import Source
+from queue_block import Queue
+from channel_block import Channel
 
 
 class QueueSystem():
