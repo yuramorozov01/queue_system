@@ -56,9 +56,9 @@ def calc_average_time_in_system(requests):
 def calc_measures_of_efficiency(states, requests):
 	states_probs = calc_states_probs(states)
 	P_reject = calc_prob_of_reject(requests)
-	P_block = calc_prob_of_block(states, requests)
 	Q = 1 - P_reject
 	A = 0.5 * Q
+	P_block = calc_prob_of_block(states, requests)
 	L_queue = calc_average_queue_length(states)
 	L_sys = calc_average_requests_system(states)
 	W_queue = calc_average_time_in_queue(requests)
